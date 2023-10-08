@@ -6,9 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cloud.aws.messaging.config.annotation.NotificationMessage;
-import org.springframework.cloud.aws.messaging.listener.SqsMessageDeletionPolicy;
-import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,7 +16,9 @@ public class SqsService {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     private final AmazonSQS amazonSQS;
-    private static final String QUEUE_NAME = "upload-file-event-sqs";
+
+
+
 
     public CreateQueueResult createQueue(final String queueName) {
         //TODO: create with createObjectRequest params
@@ -48,7 +47,6 @@ public class SqsService {
             sendMessageRequest = new SendMessageRequest().withQueueUrl("http://localhost:4566/000000000000/" + queueUrl)
                     .withDelaySeconds(1)
                     .withMessageBody(message);
-                    //.withMessageDeduplicationId("teste");
             SendMessageResult ret = amazonSQS.sendMessage(sendMessageRequest);
             logger.info("Mensagem produzida com sucesso !! {}", ret.getMD5OfMessageAttributes());
             return ret;
@@ -58,12 +56,7 @@ public class SqsService {
         return null;
     }
 
-    @SqsListener(value = QUEUE_NAME,
-            deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
-    public void receive(@NotificationMessage String event) {
 
-        logger.info("objectKey:: {}",event);
-    }
 
     //@SqsListener(value = QUEUE_NAME, deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
     public List<Message> receiveMessages(final String queueUrl) {

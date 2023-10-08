@@ -1,0 +1,53 @@
+management:
+    endpoint:
+        health:
+            enabled: true
+            show-details: always
+        info:
+            enabled: true
+        prometheus:
+            enabled: true
+    endpoints:
+        enabled-by-default: false
+        web:
+            exposure:
+                include: info, debug, warning, health, prometheus, metrics
+    metrics:
+        tags:
+            application: spring-actuator
+server:
+    port: 8080
+spring:
+    jackson:
+        deserialization:
+            fail-on-unknown-properties: true
+    jpa:
+        properties:
+            hibernate:
+                generate_statistics: true
+url:
+    api:
+        juros: https://juros-api.itau.br
+cloud:
+    aws:
+        credentials:
+            access-key: foo
+            secret-key: bar
+        sqs:
+            order-queue:
+                url: http://localhost:4566/000000000000/upload-file-event-sqs
+                name: upload-file-event-sqs
+        sns:
+            order-created:
+                arn: arn:aws:sns:eu-central-1:000000000000:order-created-topic
+                name: order-created-topic
+        stack:
+            auto: false
+        region:
+            static: sa-east-1
+logging:
+    level:
+        com:
+            amazonaws:
+                util:
+                    EC2MetadataUtils: error
