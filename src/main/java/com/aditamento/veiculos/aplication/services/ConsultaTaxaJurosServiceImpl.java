@@ -25,13 +25,13 @@ public class ConsultaTaxaJurosServiceImpl implements ConsultaTaxaJurosService {
     Logger logger = LoggerFactory.getLogger(this.getClass());
     @Override
     public JurosCalculado consultaTaxaJuros(ConsultaTaxaJuros contratoTaxaJuros) {
-        logger.debug("Iniciando consulta da taxa de juros", contratoTaxaJuros);
+        logger.debug("Iniciando consulta da taxa de juros {}", contratoTaxaJuros);
         //ResponseEntity<ConsultaTaxaJurosResponse> responseEntity = client.consultaTaxaJuros(contratoTaxaJuros);
         ConsultaTaxaJurosResponse jurosResponse = new ConsultaTaxaJurosResponse();
         jurosResponse.setData(JurosCalculadoDTO.builder().percentualJuros(1.98).valorTotal(new BigDecimal(5000)).build());
         ResponseEntity<ConsultaTaxaJurosResponse> responseEntity = ResponseEntity.ok(jurosResponse);
 
-        logger.info("Taxa de juros consultada com sucesso!", responseEntity);
+        logger.info("Taxa de juros consultada com sucesso! {}", responseEntity);
         return responseEntityJurosCalculadoEntityMap.map(responseEntity);
     }
 }

@@ -3,12 +3,20 @@ package com.aditamento.veiculos.aplication.services.sqs;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.util.concurrent.AtomicDouble;
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
+import io.micrometer.core.instrument.Tags;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 @RequiredArgsConstructor
@@ -16,6 +24,9 @@ public class SqsService {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     private final AmazonSQS amazonSQS;
+    private final MeterRegistry registry;
+
+    private AtomicDouble sqsMessage;
 
 
 
@@ -60,6 +71,9 @@ public class SqsService {
 
     //@SqsListener(value = QUEUE_NAME, deletionPolicy = SqsMessageDeletionPolicy.ON_SUCCESS)
     public List<Message> receiveMessages(final String queueUrl) {
+        Map<String, AtomicInteger> statusCodes = new HashMap<>();
+
+
         ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest();
         receiveMessageRequest.setQueueUrl(queueUrl);
         receiveMessageRequest.setWaitTimeSeconds(2);
@@ -68,6 +82,14 @@ public class SqsService {
         if (ret.isEmpty()){
             logger.info("Não existe mensagem a ser consumida");
         }
+
+        statusCodes.put("sqs-counter", new AtomicInteger(ret.size()));
+
+        Gauge.builder("metrica-sqs", statusCodes, statusCode -> statusCodes.get("sqs-counter").get())
+                .tags(Tags.of(Tag.of("gauge", "sqs")))
+                .description("teste")
+                .register(registry);
+
         ret.forEach(message -> {
             amazonSQS.deleteMessage(queueUrl, message.getReceiptHandle());
             logger.info("Mensagem deletada com sucesso !! {}", message.getBody());

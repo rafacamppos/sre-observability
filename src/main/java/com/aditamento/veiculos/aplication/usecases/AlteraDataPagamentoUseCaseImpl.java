@@ -5,8 +5,6 @@ import com.aditamento.veiculos.adapter.datastore.mapper.Mapper;
 import com.aditamento.veiculos.domain.entity.AlteraDataPagamento;
 import com.aditamento.veiculos.domain.entity.FinanceiroDomain;
 import com.aditamento.veiculos.domain.exceptions.BusinessException;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,14 +27,14 @@ public class AlteraDataPagamentoUseCaseImpl implements AlteraDataPagamentoUseCas
     @Override
     public Aditamento alteraDataPagamento(AlteraDataPagamento alteraDataPagamento) {
 
-        logger.debug("Iniciando alteração da data do pagamento", alteraDataPagamento);
+        logger.debug("Iniciando alteração da data do pagamento {}", alteraDataPagamento);
         this.validaContrato(alteraDataPagamento);
         this.validaNovaDataPagamento(alteraDataPagamento.getFinanceiro().get(0).getDiaPagamento(), alteraDataPagamento.getNovaDataPagamento());
         FinanceiroDomain financeiro = getFinanceiro(alteraDataPagamento);
         List<FinanceiroDomain> listaFinanceiro = new ArrayList<>(alteraDataPagamento.getFinanceiro());
         listaFinanceiro.add(financeiro);
         alteraDataPagamento.setFinanceiro(listaFinanceiro);
-        logger.info("Dia de pagamento alterado com sucesso", alteraDataPagamento);
+        logger.info("Dia de pagamento alterado com sucesso {}", alteraDataPagamento);
         return alteraDiaPagamentoAditamentoMap.map(alteraDataPagamento);
     }
 

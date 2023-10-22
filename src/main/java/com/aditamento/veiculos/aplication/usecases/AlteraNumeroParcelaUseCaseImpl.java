@@ -27,13 +27,13 @@ public class AlteraNumeroParcelaUseCaseImpl implements AlteraNumeroParcelaUseCas
     Logger logger = LoggerFactory.getLogger(this.getClass());
     @Override
     public Aditamento alteraNumeroParcelas(AlteraNumeroParcelas alteraNumeroParcelas) {
-        logger.debug("Iniciando alteração do numero de parcelas", alteraNumeroParcelas);
+        logger.debug("Iniciando alteração do numero de parcelas {}", alteraNumeroParcelas);
         this.validaContrato(alteraNumeroParcelas, alteraNumeroParcelas.getFinanceiro().get(alteraNumeroParcelas.getFinanceiro().size()-1).getQuantidadeParcelas());
         List<FinanceiroDomain> listaFinanceiro = new ArrayList<>(alteraNumeroParcelas.getFinanceiro());
         JurosCalculado jurosCalculado = consultaTaxaJurosService.consultaTaxaJuros(alteraParcelasToConsultaTaxaMapper.map(alteraNumeroParcelas));
         listaFinanceiro.add(this.getFinanceiro(alteraNumeroParcelas, jurosCalculado));
         alteraNumeroParcelas.setFinanceiro(listaFinanceiro);
-        logger.info("Número de parcelas alterado com sucesso", alteraNumeroParcelas);
+        logger.info("Número de parcelas alterado com sucesso {}", alteraNumeroParcelas);
         return alteraNumeroParcelasAditamentoMapper.map(alteraNumeroParcelas);
     }
 

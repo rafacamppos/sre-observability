@@ -15,6 +15,10 @@ management:
     metrics:
         tags:
             application: spring-actuator
+        distribution:
+            percentiles[http.server.requests]: 0.5, 0.7, 0.95, 0.99
+            percentiles-histogram[http.server.requests]: true
+            slo[http.server.requests]: 100ms, 500ms, 1000ms, 1500ms, 2000ms, 2500ms, 3000ms, 3500ms, 4000ms, 4500ms, 5000ms, 5500ms, 6000ms
 server:
     port: 8080
 spring:
