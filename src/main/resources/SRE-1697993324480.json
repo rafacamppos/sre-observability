@@ -35,24 +35,26 @@
           "custom": {
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
+            "axisPlacement": "left",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 9,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
             "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -69,13 +71,10 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
-          }
+          },
+          "unit": "s"
         },
         "overrides": []
       },
@@ -90,7 +89,7 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -98,6 +97,7 @@
           "sort": "none"
         }
       },
+      "pluginVersion": "10.0.3",
       "targets": [
         {
           "datasource": {
@@ -273,23 +273,27 @@
           },
           "mappings": [],
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
                 "color": "dark-red",
                 "value": null
               },
               {
+                "color": "dark-red",
+                "value": 30
+              },
+              {
+                "color": "#E24D42",
+                "value": 40
+              },
+              {
                 "color": "dark-orange",
                 "value": 60
               },
               {
-                "color": "light-yellow",
+                "color": "dark-yellow",
                 "value": 80
-              },
-              {
-                "color": "light-green",
-                "value": 90
               },
               {
                 "color": "dark-green",
@@ -319,6 +323,7 @@
           "fields": "",
           "values": false
         },
+        "text": {},
         "textMode": "auto"
       },
       "pluginVersion": "10.0.3",
@@ -329,7 +334,9 @@
             "uid": "e42ec3a2-6c4d-4d43-9007-d05102aa5056"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_server_requests_seconds_count{application=\"spring-actuator\", instance=\"host.docker.internal:8080\", job=\"spring-actuator\", status = \"200\", method=\"POST\", uri=\"/aditamento/altera-quantidade-parcelas\"}[$__rate_interval])) / sum(rate(http_server_requests_seconds_count{application=\"spring-actuator\", instance=\"host.docker.internal:8080\", job=\"spring-actuator\", method=\"POST\", uri=\"/aditamento/altera-quantidade-parcelas\"}[$__rate_interval])) * 100",
+          "exemplar": false,
+          "expr": "(sum(rate(http_server_requests_seconds_count{application=\"spring-actuator\", instance=\"host.docker.internal:8080\", job=\"spring-actuator\", status=\"200\", method=\"POST\", uri=\"/aditamento/altera-quantidade-parcelas\"}[$__rate_interval])) * 100) / sum(rate(http_server_requests_seconds_count{application=\"spring-actuator\", instance=\"host.docker.internal:8080\", job=\"spring-actuator\", method=\"POST\", uri=\"/aditamento/altera-quantidade-parcelas\"}[$__rate_interval]))",
+          "format": "time_series",
           "instant": false,
           "legendFormat": "altera-quantidade-parcelas",
           "range": true,
