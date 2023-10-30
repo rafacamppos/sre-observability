@@ -15,6 +15,6 @@ spec:
       containers:
         - name: sre-observabilty
           image: rafacamppos/veiculos:tagname
-          imagePullPolicy: Never
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
