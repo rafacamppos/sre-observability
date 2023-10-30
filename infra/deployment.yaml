@@ -18,3 +18,40 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sre-observabilty-api
+  labels:
+    app: sre-observabilty-api
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: sre-observabilty-api
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sre-observabilty-api
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /aditamento/
+        pathType: Prefix
+        backend:
+          service:
+            name: sre-observabilty-api
+            port:
+              number: 80
