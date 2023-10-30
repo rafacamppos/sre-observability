@@ -17,7 +17,7 @@ spec:
           image: rafacamppos/veiculos:0.0.1
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - containerPort: 8081
 
 ---
 
@@ -30,9 +30,9 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 8080
+  - port: 81
     protocol: TCP
-    targetPort: 8080
+    targetPort: 81
   selector:
     app: sre-observabilty-api
 
@@ -54,4 +54,4 @@ spec:
           service:
             name: sre-observabilty-api
             port:
-              number: 8080
+              number: 81
