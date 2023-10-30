@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sre-observabilty
+spec:
+  selector:
+      matchLabels:
+        app: sre-observabilty
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: sre-observabilty
+    spec:
+      containers:
+        - name: sre-observabilty
+          image: rafacamppos/veiculos:tagname
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
