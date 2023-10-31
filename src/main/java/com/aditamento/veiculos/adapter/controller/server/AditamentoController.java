@@ -83,6 +83,12 @@ public class AditamentoController {
         return this.getDataResponse(aditamento);
     }
 
+    @RequestMapping(value = "/teste", method = RequestMethod.GET)
+    public String foo() {
+        return "Response!";
+    }
+
+
     private ResponseEntity<AditamentoResponse> getDataResponse(Aditamento aditamento){
         return ResponseEntity.ok(aditamentoAditamentoResponseEntityMap.map(aditamento));
     }
