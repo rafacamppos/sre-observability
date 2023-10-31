@@ -21,20 +21,3 @@ spec:
             hostPort: 8080
             name: http
             protocol: TCP
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: sre-observabilty
-  namespace: argocd
-spec:
-  type: NodePort
-  ports:
-  - name: http
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
-    nodePort: 30080
-  
