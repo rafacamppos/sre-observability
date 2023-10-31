@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sre-observabilty
+  name: sre-observability
   namespace: argocd
 spec:
   selector:
       matchLabels:
-        app: sre-observabilty
+        app: sre-observability
   replicas: 2
   template:
     metadata:
       labels:
-        app: sre-observabilty
+        app: sre-observability
     spec:
       containers:
-        - name: sre-observabilty
+        - name: sre-observability
           image: rafacamppos/sre-app
           imagePullPolicy: Always
           ports:
