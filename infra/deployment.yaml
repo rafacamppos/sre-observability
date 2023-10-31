@@ -39,4 +39,24 @@ spec:
     nodePort: 30080
   selector:
     app: sre-observabilty
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sre-observabilty
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /aditamento/
+        pathType: Prefix
+        backend:
+          service:
+            name: sre-observabilty
+            port:
+              number: 80
   
