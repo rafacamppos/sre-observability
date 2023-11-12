@@ -42,7 +42,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - hosts: sre.observability.rafael.com
+  - host: sre.observability.rafael.com
     http:
       paths:
         - path: /
