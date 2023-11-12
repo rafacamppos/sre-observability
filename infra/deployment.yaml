@@ -7,7 +7,7 @@ spec:
   selector:
       matchLabels:
         app: sre-observability
-  replicas: 5
+  replicas: 2
   template:
     metadata:
       labels:
