@@ -4,7 +4,7 @@ metadata:
   name: sre-observability-service
   namespace: sre
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: sre-observability
   ports:
