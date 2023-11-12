@@ -2,12 +2,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sre-observability
-  namespace: sre
+  namespace: argocd
 spec:
   selector:
       matchLabels:
         app: sre-observability
-  replicas: 2
+  replicas: 5
   template:
     metadata:
       labels:
