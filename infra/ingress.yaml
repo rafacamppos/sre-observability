@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: sre-observability-ingress
   namespace: sre
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - host: sre.observability.rafael.com
