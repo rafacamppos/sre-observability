@@ -21,21 +21,21 @@ spec:
           - containerPort: 8081
           readinessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: 8081
-            initialDelaySeconds: 30
+            initialDelaySeconds: 60
             periodSeconds: 10
             timeoutSeconds: 20
           livenessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: 8081
-            initialDelaySeconds: 30
+            initialDelaySeconds: 60
             periodSeconds: 10
             timeoutSeconds: 20
           startupProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: 8081
             initialDelaySeconds: 60
             periodSeconds: 10
