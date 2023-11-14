@@ -1,5 +1,5 @@
 FROM openjdk:latest
-EXPOSE 8080
+EXPOSE 8081
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
 RUN bash -c 'touch /app.jar'
