@@ -1,0 +1,165 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    istio-injection: enabled
+  name: argocd
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-sre
+  namespace: argocd
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"    
+  labels:
+    app.kubernetes.io/name: app-sre
+    app.kubernetes.io/instance: app-sre 
+spec:
+  ports:
+  - name: web
+    port: 8080
+    protocol: TCP
+  selector:
+    app: app-sre
+  type: ClusterIP
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: app-sre
+  namespace: argocd
+spec:
+  maxReplicas: 10
+  minReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: app-sre
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: app-sre
+  namespace: argocd
+spec:
+  host: app-sre
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+    trafficPolicy:
+      connectionPool:
+        tcp:
+          maxConnections: 100
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: app-sre-gateway
+  namespace: argocd
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "app-sre"
+    - "app-sre.k8s.raj.ninja"
+    - "app-sre.app-sre.svc.cluster.local"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: app-sre-gateway
+  namespace: argocd
+spec:
+  hosts:
+  - "app-sre.app-sre.svc.cluster.local"
+  - "app-sre.k8s.raj.ninja"
+  - "app-sre"
+  gateways:
+  - app-sre-gateway
+  http:
+  - route:
+    - destination:
+        host: app-sre
+        port:
+          number: 8080
+    retries:
+      attempts: 0
+      perTryTimeout: 500ms
+      retryOn: refused-stream
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: app-sre
+  namespace: argocd
+spec:
+  replicas: 10
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {duration: 10}
+      - setWeight: 40
+      - pause: {duration: 10}
+      - setWeight: 60
+      - pause: {duration: 10}
+      - setWeight: 80
+      - pause: {duration: 10}
+      - setWeight: 100    
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: app-sre
+  template:
+    metadata:
+      annotations:
+        istio-injection: enabled
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"           
+      labels:
+        app: app-sre
+        name: app-sre
+        version: v1
+    spec:
+      containers:
+      - name: app-sre
+        image: rafacamppos/sre-app
+        ports:
+        - containerPort: 8080
+          name: http
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        startupProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /readiness
+            port: 8080
+          periodSeconds: 10
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+            path: /liveness
+            port: 8080
+          periodSeconds: 10
+      terminationGracePeriodSeconds: 60
