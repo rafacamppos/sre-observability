@@ -4,13 +4,13 @@ kind: Namespace
 metadata:
   labels:
     istio-injection: enabled
-  name: argocd
+  name: argorollout
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: app-sre
-  namespace: argocd
+  namespace: argorollout
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8080"    
@@ -30,7 +30,7 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: app-sre
-  namespace: argocd
+  namespace: argorollout
 spec:
   maxReplicas: 10
   minReplicas: 10
@@ -50,7 +50,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: app-sre
-  namespace: argocd
+  namespace: argorollout
 spec:
   host: app-sre
   subsets:
@@ -66,7 +66,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: app-sre-gateway
-  namespace: argocd
+  namespace: argorollout
 spec:
   selector:
     istio: ingressgateway 
@@ -84,7 +84,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: app-sre-gateway
-  namespace: argocd
+  namespace: argorollout
 spec:
   hosts:
   - "app-sre.app-sre.svc.cluster.local"
@@ -107,7 +107,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: app-sre
-  namespace: argocd
+  namespace: argorollout
 spec:
   replicas: 10
   strategy:
