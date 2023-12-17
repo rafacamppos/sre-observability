@@ -147,19 +147,4 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
-          startupProbe:
-            failureThreshold: 10
-            httpGet:
-              path: /readiness
-              port: 8080
-            periodSeconds: 10
-          livenessProbe:
-            failureThreshold: 10
-            httpGet:
-              httpHeaders:
-                - name: Custom-Header
-                  value: Awesome
-              path: /liveness
-              port: 8080
-            periodSeconds: 10
       terminationGracePeriodSeconds: 60
