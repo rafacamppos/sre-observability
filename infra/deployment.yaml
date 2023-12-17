@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sre-observability
-  namespace: argocd
+  namespace: rollouts-demo
 spec:
   selector:
       matchLabels:
