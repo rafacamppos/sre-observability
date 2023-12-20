@@ -29,3 +29,13 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - uses: actions/checkout@v1
+
+    - run: mkdir -p target/
+
+    - run: echo hello > target/veiculos-0.0.1.jar
+
+    - uses: actions/upload-artifact@v1
+      with:
+       name: veiculos-0.0.1
+       path: target/
