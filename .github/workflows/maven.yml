@@ -28,7 +28,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - run: mvn clean package -DskipTests
-    - run: mkdir staging && mv target/veiculos-0.0.1.jar target/veiculos-0.0.1.jar && cp target/veiculos.jar staging
+    - run: mkdir staging && mv target/veiculos-0.0.1.jar target/veiculos-$(date +%s).jar && cp target/veiculos.jar staging
     - uses: actions/upload-artifact@v3
       with:
         name: Package
