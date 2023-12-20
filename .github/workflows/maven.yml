@@ -27,15 +27,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
-    - uses: actions/checkout@v1
-
-    - run: mkdir -p target/
-
-    - run: echo hello > target/veiculos-0.0.1.jar
-
-    - uses: actions/upload-artifact@v1
+    - run: mvn clean package -DskipTests
+    - run: mkdir staging && mv target/veiculos-0.0.1.jar target/veiculos-0.0.1.jar && cp target/veiculos-0.0.1.jar staging
+    - uses: actions/upload-artifact@v3
       with:
-       name: veiculos-0.0.1
-       path: target/
+        name: Package
+        path: staging
+        retention-days: 1
