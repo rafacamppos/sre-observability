@@ -37,5 +37,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: jar-artifact
-        path: ${{ github.workspace }}/sre-observability/target/veiculos.jar
+        path: ${{ github.workspace }}/sre-observability/target/veiculos-$(date +%s).jar
         retention-days: 1
