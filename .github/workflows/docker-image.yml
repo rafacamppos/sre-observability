@@ -28,7 +28,7 @@ jobs:
           DOCKER_BUILDKIT: 1
           ECR_REGISTRY: ${{secrets.DOCKER_USER}}
           ECR_REPOSITORY: sre-app
-          IMAGE_TAG: github-tag-autoincrement
+          IMAGE_TAG: $RANDOM
       run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
