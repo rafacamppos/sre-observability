@@ -21,8 +21,13 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: Build the Docker Image
-      run: docker build . --file Dockerfile --tag 1.0.0
-    - name: Docker push
+      id: build-image
+      env:
+          DOCKER_BUILDKIT: 1
+          ECR_REGISTRY: ${{secrets.DOCKER_USER}}
+          ECR_REPOSITORY: sre-app
+          IMAGE_TAG: ${{ steps.vars.outputs.github_short_sha }}
       run: |
-        docker tag ${{secrets.DOCKER_USER}} sre-app:1.0.0
-        docker push ${{secrets.DOCKER_USER}}/sre-app:1.0.0
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
