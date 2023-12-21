@@ -27,10 +27,15 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - run: mvn clean package -DskipTests
-    - run: mkdir staging && mv target/veiculos-0.0.1.jar target/veiculos-$(date +%s).jar && cp target/*.jar staging
-    - uses: actions/upload-artifact@v3
+    - name: Compile
+      run: mvn -B compile --file sre-observability/pom.xml
+
+    - name: Build a package
+      run: mvn -B package --file sre-observability/pom.xml
+
+    - name: Temporarily save jar artifact
+      uses: actions/upload-artifact@v2
       with:
-        name: Package
-        path: staging
+        name: jar-artifact
+        path: ${{ github.workspace }}/sre-observability/target/veiculos.jar
         retention-days: 1
