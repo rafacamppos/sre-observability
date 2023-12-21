@@ -28,14 +28,14 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Compile
-      run: mvn -B compile --file sre-observability/pom.xml
+      run: mvn -B compile --file ./pom.xml
 
     - name: Build a package
-      run: mvn -B package --file sre-observability/pom.xml
+      run: mvn -B package --file ./pom.xml
 
     - name: Temporarily save jar artifact
       uses: actions/upload-artifact@v2
       with:
         name: jar-artifact
-        path: ${{ github.workspace }}/sre-observability/target/veiculos-$(date +%s).jar
+        path: ${{ github.workspace }}/./target/veiculos-$(date +%s).jar
         retention-days: 1
