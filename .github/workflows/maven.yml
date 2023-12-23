@@ -27,18 +27,11 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Pasta app
-      run: cd app
-      
     - name: Compile
-      run: 
-        cd app
-        mvn -B compile --file ./pom.xml
+      run: mvn -B compile --file ./app/pom.xml
 
     - name: Build a package
-      run: 
-        cd app
-        mvn -B package --file ./pom.xml
+      run: mvn -B package --file ./app/pom.xml
 
     - name: Temporarily save jar artifact
       uses: actions/upload-artifact@v2
