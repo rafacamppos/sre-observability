@@ -35,6 +35,7 @@ jobs:
           ECR_REPOSITORY: sre-app
           IMAGE_TAG: VERSION
       run: |
+          ls
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
