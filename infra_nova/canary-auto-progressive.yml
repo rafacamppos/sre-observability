@@ -1,16 +1,16 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    istio-injection: enabled
-  name: chip
----
+# ---
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   labels:
+#     istio-injection: enabled
+#   name: chip
+# ---
 apiVersion: v1
 kind: Service
 metadata:
   name: chip
-  namespace: chip
+  namespace: argocd
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8080"
@@ -30,7 +30,7 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: chip
-  namespace: chip
+  namespace: argocd
 spec:
   maxReplicas: 10
   minReplicas: 10
@@ -50,7 +50,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: chip
-  namespace: chip
+  namespace: argocd
 spec:
   host: chip
   subsets:
@@ -66,7 +66,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: chip-gateway
-  namespace: chip
+  namespace: argocd
 spec:
   selector:
     istio: ingressgateway
@@ -84,7 +84,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: chip-gateway
-  namespace: chip
+  namespace: argocd
 spec:
   hosts:
     - "chip.chip.svc.cluster.local"
@@ -107,7 +107,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: chip
-  namespace: chip
+  namespace: argocd
 spec:
   replicas: 10
   strategy:
