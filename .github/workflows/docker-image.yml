@@ -27,22 +27,15 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-    - name: Build and push
-      id: docker_build
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags: sre-app:10123
-#    - name: Build the Docker Image
-#      id: build-image
-#      env:
-#          DOCKER_BUILDKIT: 1
-#          ECR_REGISTRY: ${{secrets.DOCKER_USER}}
-#          ECR_REPOSITORY: sre-app
-#          IMAGE_TAG: VERSION
-#      run: |
-#          ls
-#          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-#          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-#          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+    - name: Build the Docker Image
+      id: build-image
+      env:
+          DOCKER_BUILDKIT: 1
+          ECR_REGISTRY: ${{secrets.DOCKER_USER}}
+          ECR_REPOSITORY: sre-app
+          IMAGE_TAG: VERSION
+      run: |
+          cd app
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
