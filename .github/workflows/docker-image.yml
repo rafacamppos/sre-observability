@@ -34,6 +34,11 @@ jobs:
           ECR_REGISTRY: ${{secrets.DOCKER_USER}}
           ECR_REPOSITORY: sre-app
           IMAGE_TAG: VERSION
+      uses: docker/build-push-action@v2
+      with:
+        context: .    
+        push: true
+        tags: ${{ github.repository }}:${{ steps.vars.outputs.tag }}
       run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
