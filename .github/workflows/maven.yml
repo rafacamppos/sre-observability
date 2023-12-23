@@ -37,6 +37,6 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: jar-artifact
-        path: ${{ github.workspace }}/veiculos-$(date +%s).jar
+        path: ${{ github.workspace }}/target/veiculos-$(date +%s).jar
         retention-days: 1
 
